@@ -30,30 +30,119 @@ In this project:
 5. We train only the classification head to predict the beverage category.
  ---
 
-## Dataset structure
+## Dataset Description
+
+The dataset is organized into training and validation sets.  
+Each class is represented by its own folder, and labels are inferred automatically from directory names.
 
 data/
-├─ train/
-│ ├─ cola/
-│ ├─ orange_juice/
-│ └─ water/
-└─ val/
-├─ cola/
-├─ orange_juice/
-└─ water/
+├── train/
+│ ├── cola/
+│ ├── orange_juice/
+│ └── water/
+└── val/
+├── cola/
+├── orange_juice/
+└── water/
+
+
+Images are stored in standard formats such as JPEG and PNG, which are fully supported by TensorFlow image pipelines.
 
 ---
 
-## Requirements
+## Model Architecture
 
-- Python 3.10+ recommended
-- Dependencies listed in `requirements.txt`
+The project uses MobileNetV2, a lightweight and efficient convolutional neural network pretrained on the ImageNet dataset.
 
-Install dependencies:
+Key characteristics of MobileNetV2:
+- Pretrained on millions of images  
+- Efficient and suitable for academic projects  
+- Strong feature extraction capabilities  
 
-### Windows (PowerShell)
-```powershell
+The pretrained network is used as a frozen feature extractor, and a custom classification head is added for the 3-class beverage classification task.
+
+---
+
+## Transfer Learning Strategy
+
+- The convolutional base (MobileNetV2) is frozen to preserve learned features  
+- A custom classification head is trained, consisting of:
+  - Global Average Pooling  
+  - Dropout layer for regularization  
+  - Dense softmax layer for multi-class classification  
+- Only the newly added layers are trained  
+
+This strategy ensures stable training and reduces overfitting.
+
+---
+
+## Project Structure
+
+transfer-learning-beverage-classifier/
+├── data/
+├── models/
+├── reports/
+├── src/
+│ ├── config.py
+│ ├── data.py
+│ ├── model.py
+│ ├── train.py
+│ └── predict.py
+├── requirements.txt
+└── README.md
+
+
+- `train.py` handles model training and saving  
+- `predict.py` performs inference on new images  
+- `model.py` defines the CNN architecture  
+- `data.py` loads and prepares datasets  
+- `config.py` centralizes configuration and paths using `Path(__file__).parent`  
+
+---
+
+## Installation
+
+### Requirements
+- Python 3.11 or higher  
+- Virtual environment recommended  
+
+### Setup
+
+```bash
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
+
+### Training the Model
+
+To train the model, ensure images are correctly placed in the dataset folders and run:
+
+python -m src.train
+
+This process:
+
+Trains the CNN model
+
+Saves the trained model in models/
+
+Stores training metrics and reports
+
+### Running Predictions
+
+To classify a new image:
+
+python -m src.predict --image path/to/image.jpg
+
+The output includes:
+
+Predicted class
+
+Confidence score
+
+Probability distribution across all classes
+
+### Results
+
+The trained model successfully classifies beverage images into the three defined categories.
+Prediction confidence varies depending on image quality, lighting conditions, and background, reflecting realistic real-world performance.
