@@ -1,0 +1,15 @@
+{
+  "image_size": [
+    224,
+    224
+  ],
+  "class_names": [
+    "cola",
+    "orange_juice",
+    "water"
+  ],
+  "metrics": {
+    "loss": 1.2149125337600708,
+    "compile_metrics": 0.5
+  }
+}

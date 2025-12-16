@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+models/*.h5
+models/*.keras
+reports/*.png
+reports/*.json
+node_modules
